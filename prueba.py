@@ -62,6 +62,9 @@ def imprimir_mapa_con_ruta(matrix, ruta, start, goal):
 
 if __name__ == "__main__":
     # Define el mapa con obstáculos (10x10) usando NumPy
+    rows = 10
+    cols = 10
+    
     mapa = np.array([
         [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 1, 0, 1, 0, 0, 0, 1, 0, 0],
