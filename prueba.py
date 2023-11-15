@@ -45,6 +45,14 @@ def a_star(matrix, start, goal):
     return None
 
 def imprimir_mapa_con_ruta(matrix, ruta, start, goal):
+    """_summary_
+
+    Args:
+        matrix (_type_): _description_
+        ruta (_type_): _description_
+        start (_type_): _description_
+        goal (_type_): _description_
+    """
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):
             if (i, j) == start:
@@ -61,10 +69,17 @@ def imprimir_mapa_con_ruta(matrix, ruta, start, goal):
         print()
 
 if __name__ == "__main__":
-    # Define el mapa con obstáculos (10x10) usando NumPy
+    # Define la matriz con obstáculos (10x10) usando NumPy
     rows = 10
     cols = 10
     
+    lower_range = 0
+    upper_range = 1
+    
+    random_matrix = np.random.randint(2, size = (rows, cols))
+    print(random_matrix)
+    
+    '''
     mapa = np.array([
         [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 1, 0, 1, 0, 0, 0, 1, 0, 0],
@@ -77,29 +92,15 @@ if __name__ == "__main__":
         [0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
+'''
 
-    start = (0, 0)  # Posición inicial
-    goal = (9, 9)  # Posición goal
+    start = (np.random.randint(10), np.random.randint(10)) # Posición inicial
+    goal = (np.random.randint(10), np.random.randint(10))  # Posición goal
 
-    ruta_optima = a_star(mapa, start, goal)
+    ruta_optima = a_star(random_matrix, start, goal)
 
     if ruta_optima:
         print("Ruta óptima encontrada:")
-        imprimir_mapa_con_ruta(mapa, ruta_optima, start, goal)
+        imprimir_mapa_con_ruta(random_matrix, ruta_optima, start, goal)
     else:
         print("No se encontró una ruta óptima.")
-
-
-'''
-S 1 . . . . . . . . 
-X 1 . 1 . . . 1 . . 
-X X . 1 . 1 . 1 . . 
-. X 1 1 . 1 . 1 . . 
-. X X 1 . 1 . 1 . . 
-. . X 1 . 1 . . . . 
-. . X X X 1 . 1 . . 
-. . . 1 X 1 . 1 . . 
-. . . 1 X X X 1 . . 
-. . . . . . X X X E 
-'''
-
