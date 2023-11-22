@@ -65,18 +65,21 @@ def imprimir_mapa_con_ruta(matrix, ruta, start, goal):
                 if matrix[i, j] == 0:
                     print(".", end=" ")  # Celda libre
                 else:
-                    print("1", end=" ")  # Obstáculo
+                    print("#", end=" ")  # Obstáculo
         print()
 
 if __name__ == "__main__":
     # Define la matriz con obstáculos (10x10) usando NumPy
     rows = 10
     cols = 10
+
     
-    lower_range = 0
-    upper_range = 1
+    random_matrix = np.zeros((rows, cols), dtype=int)
+    numero_de_unos = np.random.randint(20,30)
+    indices_unos = np.random.choice(rows * cols, numero_de_unos, replace=False)
+    random_matrix.flat[indices_unos] = 1
+   
     
-    random_matrix = np.random.randint(2, size = (rows, cols))
     print(random_matrix)
     
     '''
@@ -93,9 +96,17 @@ if __name__ == "__main__":
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
 '''
+    start = {'x': np.random.randint(10),'y': np.random.randint(10)} # Posición inicial
+    goal = {'x': np.random.randint(10),'y': np.random.randint(10)} # Posición goal
 
-    start = (np.random.randint(10), np.random.randint(10)) # Posición inicial
-    goal = (np.random.randint(10), np.random.randint(10))  # Posición goal
+    
+
+
+
+
+    while random_matrix[start['x']][start['y']] == 1 or random_matrix[goal['x']][goal['y']] == 1:
+        start = {'x': np.random.randint(10),'y': np.random.randint(10)} 
+        goal = {'x': np.random.randint(10),'y': np.random.randint(10)}
 
     ruta_optima = a_star(random_matrix, start, goal)
 
@@ -104,3 +115,4 @@ if __name__ == "__main__":
         imprimir_mapa_con_ruta(random_matrix, ruta_optima, start, goal)
     else:
         print("No se encontró una ruta óptima.")
+        print(start,goal)
