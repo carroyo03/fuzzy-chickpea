@@ -10,7 +10,7 @@ def a_star(matrix, start, goal):
     movimientos = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
     n, m = matrix.shape
-    open = [(distancia_manhattan(start, goal), 0, start)]  # f(n), g(n), nodo
+    open = [(distancia_manhattan(tuple(start), tuple(goal)), 0, tuple(start))]  # f(n), g(n), nodo
     close = set()
     padres = {}
 
@@ -96,17 +96,15 @@ if __name__ == "__main__":
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ])
 '''
-    start = {'x': np.random.randint(10),'y': np.random.randint(10)} # Posición inicial
-    goal = {'x': np.random.randint(10),'y': np.random.randint(10)} # Posición goal
+    '''start = {'x': np.random.randint(10),'y': np.random.randint(10)} # Posición inicial
+    goal = {'x': np.random.randint(10),'y': np.random.randint(10)} # Posición goal'''
 
-    
+    while True:
+        start = [np.random.randint(10), np.random.randint(10)]
+        goal = [np.random.randint(10), np.random.randint(10)]
 
-
-
-
-    while random_matrix[start['x']][start['y']] == 1 or random_matrix[goal['x']][goal['y']] == 1:
-        start = {'x': np.random.randint(10),'y': np.random.randint(10)} 
-        goal = {'x': np.random.randint(10),'y': np.random.randint(10)}
+        if random_matrix[start[0]][start[1]] == 0 and random_matrix[goal[0]][goal[1]] == 0:
+            break
 
     ruta_optima = a_star(random_matrix, start, goal)
 
