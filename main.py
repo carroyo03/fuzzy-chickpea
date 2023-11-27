@@ -4,6 +4,9 @@ import numpy as np
 def manhattan_distance(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
+def euclidean_distance(a,b):
+    return np.sqrt(pow(a[0]-b[0],2) + pow(a[1]-b[1],2))
+
 def a_star(matrix, start, goal):
 
     # Heurística: distancia de Manhattan
@@ -93,9 +96,6 @@ if __name__ == "__main__":
         print("Optimal path found:")
         path_map(random_matrix, optimal_path, start, goal)
         print("- "*cols)
-        print("S: Start")
-        print("E: Goal")
-        print("#: Obstacle")
-        print(".: Free cell")
+        print("\n[Legend]: S: Start | E: Goal | #: Obstacle | .: Free cell | X: Path" )
     else:
         print("Optimal path not found.")
