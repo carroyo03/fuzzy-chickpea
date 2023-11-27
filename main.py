@@ -16,10 +16,10 @@ def a_star(matrix, start, goal):
     parents = {}
 
     # Cola de prioridad (estado actual, costo hasta el estado actual, heurística de la distancia restante al estado actual)
-    queue = [(0, start, heuristic(start, goal))]
+    priority_queue = [(0, start, heuristic(start, goal))]
 
-    while queue:
-        _, current, _ = heapq.heappop(queue)
+    while priority_queue:
+        _, current, _ = heapq.heappop(priority_queue)
 
         if current == goal:
             path = []
@@ -41,12 +41,12 @@ def a_star(matrix, start, goal):
                 if next_node not in distances or tentative_distance < distances[next_node]:
                     distances[next_node] = tentative_distance
                     priority = tentative_distance + heuristic(next_node, goal)
-                    heapq.heappush(queue, (priority, next_node, heuristic(next_node, goal)))
+                    heapq.heappush(priority_queue, (priority, next_node, heuristic(next_node, goal)))
                     parents[next_node] = current
 
     return None
 
-def imprimir_mapa_con_ruta(matrix, ruta, start, goal):
+def path_map(matrix, ruta, start, goal):
     #ruta = ruta + [start]
     for i in range(matrix.shape[0]):
         for j in range(matrix.shape[1]):
@@ -67,49 +67,35 @@ def imprimir_mapa_con_ruta(matrix, ruta, start, goal):
 
 if __name__ == "__main__":
     # Define la matriz con obstáculos (10x10) usando NumPy
-    rows = np.random.randint(10,20)
-    cols = np.random.randint(10,20)
+    rows = int(input("Insert the number of rows:"))
+    cols = int(input("Insert the number of columns:"))
 
     
     random_matrix = np.zeros((rows, cols), dtype=int)
-    numero_de_unos = np.random.randint(20,30)
-    indices_unos = np.random.choice(rows * cols, int(numero_de_unos * .01 * rows * cols), replace=False)
+    n_ones = np.random.randint(20,30)
+    indices_unos = np.random.choice(rows * cols, int(n_ones * .01 * rows * cols), replace=False)
     random_matrix.flat[indices_unos] = 1
    
-    
-    print(random_matrix)
-    
-    '''
-    mapa = np.array([
-        [0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 1, 0, 0, 0, 1, 0, 0],
-        [0, 0, 0, 1, 0, 1, 0, 1, 0, 0],
-        [0, 0, 1, 1, 0, 1, 0, 1, 0, 0],
-        [0, 0, 0, 1, 0, 1, 0, 1, 0, 0],
-        [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 1, 0, 1, 0, 0],
-        [0, 0, 0, 1, 0, 1, 0, 1, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 1, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ])
-'''
-    '''start = {'x': np.random.randint(10),'y': np.random.randint(10)} # Posición inicial
-    goal = {'x': np.random.randint(10),'y': np.random.randint(10)} # Posición goal'''
+   
 
     while True:
-        start = [np.random.randint(10), np.random.randint(10)]
-        goal = [np.random.randint(10), np.random.randint(10)]
+        start = [np.random.randint(rows), np.random.randint(cols)]
+        goal = [np.random.randint(rows), np.random.randint(cols)]
 
         if random_matrix[start[0]][start[1]] == 0 and random_matrix[goal[0]][goal[1]] == 0:
             start = tuple(start)
             goal = tuple(goal)
             break
 
-    ruta_optima = a_star(random_matrix, start, goal)
+    optimal_path = a_star(random_matrix, start, goal)
 
-    if ruta_optima:
-        print("Ruta óptima encontrada:")
-        imprimir_mapa_con_ruta(random_matrix, ruta_optima, start, goal)
+    if optimal_path:
+        print("Optimal path found:")
+        path_map(random_matrix, optimal_path, start, goal)
+        print("- "*cols)
+        print("S: Start")
+        print("E: Goal")
+        print("#: Obstacle")
+        print(".: Free cell")
     else:
-        print("No se encontró una ruta óptima.")
-        print(start,goal)
+        print("Optimal path not found.")
