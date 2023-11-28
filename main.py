@@ -96,6 +96,6 @@ if __name__ == "__main__":
         print("Optimal path found:")
         path_map(random_matrix, optimal_path, start, goal)
         print("- "*cols)
-        print("\n[Legend]: S: Start | E: Goal | #: Obstacle | .: Free cell | X: Path" )
+        print("\n[Key]: S: Start | E: Goal | #: Obstacle | .: Free cell | X: Path" )
     else:
         print("Optimal path not found.")
