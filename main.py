@@ -7,10 +7,15 @@ def manhattan_distance(a, b):
 def euclidean_distance(a,b):
     return np.sqrt(pow(a[0]-b[0],2) + pow(a[1]-b[1],2))
 
-def a_star(matrix, start, goal):
+def a_star(matrix, start, goal,distance):
 
     # Heurística: distancia de Manhattan
-    heuristic = manhattan_distance
+    if distance.startswith('m'):
+        heuristic = manhattan_distance
+        neighbourhood = ((-1, 0), (1, 0), (0, -1), (0, 1))
+    else:
+        heuristic = euclidean_distance
+        neighbourhood = ((-1, 0), (-1,-1),(-1,1),(1, 0),(1,1),(1,-1), (0, -1), (0, 1))
 
     # Diccionario para guardar la distancia mínima de cada celda
     distances = {start: 0}
@@ -31,7 +36,7 @@ def a_star(matrix, start, goal):
                 current = parents[current]
             return path[::-1]
 
-        for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+        for dx, dy in neighbourhood:
             next_node = (current[0] + dx, current[1] + dy)
 
             if (
@@ -72,6 +77,7 @@ if __name__ == "__main__":
     # Define la matriz con obstáculos (10x10) usando NumPy
     rows = int(input("Insert the number of rows:"))
     cols = int(input("Insert the number of columns:"))
+   
 
     
     random_matrix = np.zeros((rows, cols), dtype=int)
@@ -90,7 +96,13 @@ if __name__ == "__main__":
             goal = tuple(goal)
             break
 
-    optimal_path = a_star(random_matrix, start, goal)
+    while True:
+        distance = input("Insert the type of distance you want to be used (manhattan or euclidean):")
+        if distance == 'manhattan' or 'euclidean':
+            break
+        print('Error')
+
+    optimal_path = a_star(random_matrix, start, goal,distance)
 
     if optimal_path:
         print("Optimal path found:")
