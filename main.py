@@ -1,89 +1,11 @@
-import heapq
 import numpy as np
-
-
-class Functions:
-    def __init__(self, matrix,start,goal,distance_type) -> None:
-        self.matrix = matrix
-        self.start = start
-        self.goal = goal
-        self.distance_type = distance_type
-        pass
-
-    def manhattan_distance(self,a, b):
-        return abs(a[0] - b[0]) + abs(a[1] - b[1])
-
-    def euclidean_distance(self,a,b):
-        return np.sqrt(pow(a[0]-b[0],2) + pow(a[1]-b[1],2))
-
-    def a_star(self,matrix, start, goal,distance_type):
-
-        # Heurística: distancia de Manhattan
-        if distance_type.startswith('m'):
-            heuristic = self.manhattan_distance
-            neighbourhood = ((-1, 0), (1, 0), (0, -1), (0, 1))
-        else:
-            heuristic = self.euclidean_distance
-            neighbourhood = ((-1, 0), (-1,-1),(-1,1),(1, 0),(1,1),(1,-1), (0, -1), (0, 1))
-
-        # Diccionario para guardar la distancia mínima de cada celda
-        distances = {start: 0}
-
-        # Diccionario para guardar el padre de cada celda
-        parents = {}
-
-        # Cola de prioridad (estado actual, costo hasta el estado actual, heurística de la distancia restante al estado actual)
-        priority_queue = [(0, start, heuristic(start, goal))]
-
-        while priority_queue:
-            _, current, _ = heapq.heappop(priority_queue)
-
-            if current == goal:
-                path = []
-                while current in parents:
-                    path.append(current)
-                    current = parents[current]
-                return path[::-1]
-
-            for dx, dy in neighbourhood:
-                next_node = (current[0] + dx, current[1] + dy)
-
-                if (
-                    0 <= next_node[0] < matrix.shape[0]
-                    and 0 <= next_node[1] < matrix.shape[1]
-                    and matrix[next_node[0], next_node[1]] == 0
-                ):
-                    tentative_distance = distances[current] + 1
-
-                    if next_node not in distances or tentative_distance < distances[next_node]:
-                        distances[next_node] = tentative_distance
-                        priority = tentative_distance + heuristic(next_node, goal)
-                        heapq.heappush(priority_queue, (priority, next_node, heuristic(next_node, goal)))
-                        parents[next_node] = current
-
-        return None
-
-    def path_map(self,matrix, path, start, goal):
-
-        for i in range(matrix.shape[0]):
-            for j in range(matrix.shape[1]):
-                if (i, j) == start:
-                    print("S", end=" ") # start
-                elif (i, j) == goal:
-                    print("E", end=" ") # goal
-                elif (i, j) in path:
-                    print("X", end=" ") # Parte de la ruta
-                else:
-                    if matrix[i, j] == 0:
-                        print(".", end=" ") # Celda libre
-                    else:
-                        print("#", end=" ") # Obstáculo
-            print()
+from distances import *
+from a_star import *
 
         
 
 if __name__ == "__main__":
-    # Define la matriz con obstáculos (10x10) usando NumPy
+    
     rows = int(input("Insert the number of rows:"))
     cols = int(input("Insert the number of columns:"))
    
@@ -91,8 +13,8 @@ if __name__ == "__main__":
     
     random_matrix = np.zeros((rows, cols), dtype=int)
     n_ones = np.random.randint(20,30)
-    indices_unos = np.random.choice(rows * cols, int(n_ones * .01 * rows * cols), replace=False)
-    random_matrix.flat[indices_unos] = 1
+    indexes_ones = np.random.choice(rows * cols, int(n_ones * .01 * rows * cols), replace=False)
+    random_matrix.flat[indexes_ones] = 1
    
    
 
@@ -108,16 +30,20 @@ if __name__ == "__main__":
     while True:
         distance_type = input("Insert the type of distance you want to be used (manhattan or euclidean):")
         if distance_type == 'manhattan' or 'euclidean':
+            print()
             break
         print('Error')
     
     function_ = Functions(random_matrix,start,goal,distance_type)
-
-    optimal_path = function_.a_star(random_matrix, start, goal,distance_type)
+    a_star1 = a_star(random_matrix,start,goal,distance_type)
+    optimal_path = a_star1.path()
 
     if optimal_path:
         function_.path_map(random_matrix, optimal_path, start, goal)
         print("- "*cols)
         print("\n[Key]: S: Start | E: Goal | #: Obstacle | .: Free cell | X: Path" )
+        print()
+        print(f"S:{start}\n")
+        print(f"E:{goal}\n")  
     else:
         print("Optimal path not found.")
