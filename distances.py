@@ -35,10 +35,10 @@ class Functions:
                 elif (i, j) == goal:
                     print("E", end=" ") # goal
                 elif (i, j) in path:
-                    print("X", end=" ") # Parte de la ruta
+                    print("X", end=" ") # Part of path
                 else:
                     if matrix[i, j] == 0:
-                        print(".", end=" ") # Celda libre
+                        print(".", end=" ") # Free cell
                     else:
-                        print("#", end=" ") # Obstáculo
+                        print("#", end=" ") # Obstacle
             print()
