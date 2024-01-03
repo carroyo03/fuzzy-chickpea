@@ -1,5 +1,3 @@
-# fuzzy-chickpea
-
 # Pathfinding Algorithm using A* in a 2D Matrix
 
 This Python program demonstrates the A* algorithm for finding an optimal path in a randomly generated 2D matrix. The code is organized into three main files: `distances.py`, `a_star.py`, and `main.py`.
