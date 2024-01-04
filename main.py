@@ -27,8 +27,9 @@ and Euclidean distance heuristics. The project is organized into three files:
 Authors: Carlos Arroyo, Gabriel Nassri, and Juan Carlos Estefanía
 """
 
-# Import numpy for making the matrix, and the files for calculating the distances and the path
+# Import numpy for making the matrix, time for "sleeping" the output and making it more user-friendly, and the files for calculating the distances and the path
 import numpy as np
+import time
 from distances import Functions
 from a_star import AStar
 
@@ -54,8 +55,8 @@ if __name__ == "__main__":
     rows = int(input("Insert the number of rows:"))
     cols = int(input("Insert the number of columns:"))
 
-    print("Creating a random matrix with obstacles")
-   
+    print("Creating a random matrix with obstacles...")
+    time.sleep(2)
     # Creating the matrix with random values and dimensions
     random_matrix = np.zeros((rows, cols), dtype=int)
 
@@ -89,15 +90,16 @@ if __name__ == "__main__":
     # - Computational efficiency: Euclidean involves square root, Manhattan is often computationally cheaper.
     while True:
         distance_type = input("Choose the distance metric for pathfinding (Enter 'manhattan' or 'euclidean'): ")
+        time.sleep(2.5)
         if distance_type in ['manhattan','euclidean']:
             print()
             break
         print('Invalid input. Please choose either "manhattan" or "euclidean".')
-    
     # Create instances of Functions and AStar classes
     function_ = Functions(random_matrix, start, goal, distance_type)
     a_star1 = AStar(random_matrix, start, goal, distance_type)
     optimal_path = a_star1.path()
+
 
     # Creating the path visualization
     if optimal_path:

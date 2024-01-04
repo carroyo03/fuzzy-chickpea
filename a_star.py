@@ -51,15 +51,24 @@ class AStar:
         # Dictionary to store the parent of each cell
         parents = {}
 
-        # Priority queue 
+        # Openset 
         #(cost to current state, current state, remaining heuristic distance to goal)
-        # Each element in the priority_queue is a tuple.
-        priority_queue = [(0, self.start, heuristic(self.start, self.goal))]
+        # Each element in the openset is a tuple.
+        openset = [(0, self.start, heuristic(self.start, self.goal))]
 
-        while priority_queue:
-            # Pop the element with the smallest priority
-            _, current, _ = heappop(priority_queue)
+        # Closedset
+        # Set of the nodes completely explored
+        closedset = set()
 
+        while openset:
+            # Pop the node with the smallest cost
+            _, current, _ = heappop(openset)
+
+            # In case the current node is completely explored, 
+            # continue with the next node with the smallest cost
+            if current in closedset:
+                continue
+            
             if current == self.goal:
                 # Reconstruct the path from goal to start
                 path = []
@@ -67,6 +76,8 @@ class AStar:
                     path.append(current)
                     current = parents[current]
                 return path[::-1]
+            
+            
 
             for dx, dy in neighbourhood:
                 # Explore neighbors
@@ -77,22 +88,25 @@ class AStar:
                     and 0 <= next_node[1] < self.matrix.shape[1]
                     and self.matrix[next_node[0], next_node[1]] == 0
                 ):
-                    # Calculate the tentative distance from the start to the neighbor
-                    tentative_distance = distances[current] + 1
+                    # Calculate the distance from the start node to the neighbor
+                    cost_distance = distances[current] + 1
 
-                    # Check if the tentative distance is shorter than the current known distance to the neighbor
-                    if next_node not in distances or tentative_distance < distances[next_node]:
+                    # Check if this distance is shorter than the current known distance to the neighbor
+                    if next_node not in distances or cost_distance < distances[next_node]:
                         # Update the distance to the neighbor
-                        distances[next_node] = tentative_distance
+                        distances[next_node] = cost_distance
 
-                        # Calculate the priority for the neighbor in the priority queue
-                        priority = tentative_distance + heuristic(next_node, self.goal)
+                        # Calculate the cost for the neighbor in the openset
+                        total_cost = cost_distance + heuristic(next_node, self.goal)
 
-                        # Push the neighbor and its priority into the priority queue
-                        heappush(priority_queue, (priority, next_node, heuristic(next_node, self.goal)))
+                        # Push the neighbor and its cost into the openset
+                        heappush(openset, (total_cost, next_node, heuristic(next_node, self.goal)))
 
                         # Set the current cell as the parent of the neighbor
                         parents[next_node] = current
+
+            # The current node is completely explored
+            closedset.add(current)
 
         return None
 
